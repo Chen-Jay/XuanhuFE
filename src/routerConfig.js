@@ -26,16 +26,22 @@ const routerConfig = [
     path: '/',
     layout: HeaderFooterLayout,
     component: Realhome,
-  },{
+  },
+  {
     path: '/course/:courseId',
-    layout: HeaderFooterLayout, 
-    component: CourseDetail
+    layout: HeaderFooterLayout,
+    component: CourseDetail,
   },
   {
     path: '*',
     layout: BlankLayout,
     component: NotFound,
-  }
+  },
+  {
+    path: 'notfound',
+    layout: BlankLayout,
+    component: NotFound,
+  },
 ];
 
 export default routerConfig;

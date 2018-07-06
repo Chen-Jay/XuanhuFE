@@ -60,6 +60,16 @@ const asideMenuConfig = [
     path: '/home',
     icon: 'home',
   },
+  {
+    name: 'InternalError',
+    path: '/InternalError',
+    icon: 'home',
+  },
+  {
+    name: 'ServerError',
+    path: '/error',
+    icon: 'home',
+  },
 ];
 
 export { headerMenuConfig, asideMenuConfig };

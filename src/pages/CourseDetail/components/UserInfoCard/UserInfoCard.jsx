@@ -15,8 +15,8 @@ export default class UserInfoCard extends Component {
     super(props);
     console.log(props);
     this.state = {
-      "trigger": props.trigger,
-      "content": props.content
+      trigger: props.trigger,
+      content: props.content
     };
   }
 
