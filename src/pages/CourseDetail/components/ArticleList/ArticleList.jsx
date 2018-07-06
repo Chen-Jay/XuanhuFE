@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
-import { Icon,Ballon, Grid } from '@icedesign/base';
+import { Icon,Ballon, Grid, Feedback } from '@icedesign/base';
 const { Row, Col } = Grid;
 
 import IcePanel from '@icedesign/panel';
-import UserInfoCard from '../UserInfoCard'
+// import UserInfoCard from '../UserInfoCard'
+import ud from '../../../../utilities/UrlDictionary';
+import axios from 'axios';
 
 export default class ArticleList extends Component {
   static displayName = 'ArticleList';
@@ -15,21 +17,45 @@ export default class ArticleList extends Component {
     };
   }
 
+  getCourseId() {
+    var arr = window.location.hash.split("/");
+    return arr[2];
+  }
+
+  onClickVote(id, voteType, e) {
+    var voteValue = voteType;
+    if (document.getElementById((voteType == 1 ? "upvote-" : "downvote-") + id).innerHTML.search("filling") != -1) { // already voted
+      voteValue = 0;
+    }
+    var url = ud.getInstance().concat("api/courses/" + this.getCourseId() + "/comments/" + id + "/vote");
+    axios.post(url, {
+      value: voteValue
+    }).then(response => {
+      const {data} = response;
+      var uv = document.getElementById("upvote-"+id);
+      var dv = document.getElementById("downvote-"+id);
+      uv.innerHTML = "<i class=\"next-icon next-icon-arrow-up" + (voteValue != 0 && voteType == 1 ? "-filling" : "") +" next-icon-small\"></i> " + data.voteUp;
+      dv.innerHTML = "<i class=\"next-icon next-icon-arrow-down" + (voteValue != 0 && voteType == -1 ? "-filling" : "") +" next-icon-small\"></i> " + data.voteDown;
+    }).catch(e => {
+      Feedback.toast.error("投票失败，请重试！");
+    });
+  }
+
   generateReplyPanel(item) {
     return (
       <div>
           <IcePanel status="info" style={{ marginTop: "20px" }}>
             <IcePanel.Header>
             <div style={{marginTop: "2px", marginBottom: "2px"}}>
-              <span align="left">{item.user.name}</span>
+              <span align="left">{item.user.name + (item.user.teacher_id == null ? "" : ' [认证教师]')}</span>
               <span style={{float:'right'}}>
-                <span style={styles.itemMetaIcon}>
-                  <Icon type="good" size="small" /> {item.voteUp}
+                <span id={"upvote-" + item.id} onClick={this.onClickVote.bind(this, item.id, 1)} style={styles.itemMetaIcon}>
+                  <Icon type={item.voteValue == 1 ? "arrow-up-filling" : "arrow-up"} size="small" /> {item.voteUp}
                 </span>
-                <span style={styles.itemMetaIcon}>
-                  <Icon type="bad" size="small" /> {item.voteDown}
+                <span id={"downvote-" + item.id} onClick={this.onClickVote.bind(this, item.id, -1)} style={styles.itemMetaIcon}>
+                  <Icon type={item.voteValue == -1 ? "arrow-down-filling" : "arrow-down"} size="small" /> {item.voteDown}
                 </span>
-                <span style={styles.itemMetaIcon}>
+                <span id={"reply-" + item.id} style={styles.itemMetaIcon}>
                   <Icon type="skip" size="small" /> 回复Ta
                 </span>
               </span>

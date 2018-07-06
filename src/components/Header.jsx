@@ -132,7 +132,7 @@ class Header extends PureComponent {
                     className="user-department"
                     style={{ fontSize: '12px', color: '#999' }}
                   >
-                    {(userInfo.is_teacher) ? '认证教师' : '普通用户'}
+                    {(userInfo.teacher_id != null) ? '认证教师' : '普通用户'}
                   </span>
                 </div>
                 <Icon

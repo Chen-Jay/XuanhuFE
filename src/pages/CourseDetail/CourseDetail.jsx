@@ -3,7 +3,7 @@ import ArticleList from './components/ArticleList';
 
 
 /*********************************************** */
-import { Grid, Loading } from "@icedesign/base";
+import { Grid, Loading, Feedback } from "@icedesign/base";
 const { Row, Col } = Grid;
 
 import { Card,Timeline } from "@icedesign/base";
@@ -53,17 +53,23 @@ export default class CourseDetail extends Component {
         courseInfoVisible: true
       });
     }).catch(e => {
-      window.location.assign("/#/notfound")
+      window.location.replace("/#/notfound")
     });
     axios.get(this.getCourseCommentsApiUrl(this.getCourseId())).then(response=> {
       const {data} = response;
       this.setState({
         comments: data, 
       });
-    }).catch(e => {});
+    }).catch(e => {
+      Feedback.toast.error("评论加载失败，请重试！");
+    });
   }
 
   courseInfo() {
+    var teacherNameListStr = this.state.courseInfo.teachers[0].name;
+    for(var i = 1; i < this.state.courseInfo.teachers.length; ++i) {
+      teacherNameListStr += "、" + this.state.courseInfo.teachers[i].name;
+    }
     return (
     <Loading visible={!this.state.courseInfoVisible} shape="fusion-reactor">
     <Row>
@@ -73,7 +79,7 @@ export default class CourseDetail extends Component {
             title={this.state.courseInfo.title}
           >
             <Timeline>
-              <TimelineItem title={"授课教师：" + this.state.courseInfo.teachers[0].name} />
+              <TimelineItem title={"授课教师：" + teacherNameListStr} />
               <TimelineItem title="课程属性：" />
               <TimelineItem title="上课时间：" />
             </Timeline>
