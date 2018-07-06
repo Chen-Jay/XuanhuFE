@@ -1,10 +1,10 @@
 {
-  "name": "@icedesign/custom-react-scaffold",
+  "name": "xuanhufe",
   "version": "1.0.0",
-  "description": "自定义模板",
+  "description": "Xuanhu Frontend",
   "author": {
-    "name": "ICE Team",
-    "email": "ice-admin@alibaba-inc.com"
+    "name": "Xuanhu Team",
+    "email": "i@bokjan.com"
   },
   "dependencies": {
     "@icedesign/base": "^0.2.0",
@@ -20,6 +20,7 @@
     "classnames": "^2.2.5",
     "enquire-js": "^0.1.2",
     "foundation-symbol": "^0.1.0",
+    "node-sass": "^4.9.1",
     "prop-types": "^15.5.8",
     "react": "^16.4.1",
     "react-cookie": "^2.2.0",
@@ -36,7 +37,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
-    "ice-scripts": "^1.1.1"
+    "ice-scripts": "^1.6.0"
   },
   "scripts": {
     "start": "ice dev",

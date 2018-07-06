@@ -1,7 +1,7 @@
 export default class UrlDictionary {
     map;
     baseUrl;
-    instance;
+    static instance;
     static getInstance() {
         if (!this.instance) {
             this.instance = new UrlDictionary();
@@ -11,7 +11,6 @@ export default class UrlDictionary {
     }
     constructor() {
         this.map = new Map();
-        // this.baseUrl = "http://192.168.1.221/";
         this.baseUrl = window.location.origin + "/";
     }
     init() {
