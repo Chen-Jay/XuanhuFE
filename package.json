@@ -7,11 +7,11 @@
     "email": "i@bokjan.com"
   },
   "dependencies": {
-    "@icedesign/base": "^0.2.0",
+    "@icedesign/base": "^0.2.3",
     "@icedesign/container": "^0.1.2",
     "@icedesign/form-binder": "^0.1.4",
     "@icedesign/icon": "^0.1.1",
-    "@icedesign/img": "^0.1.1",
+    "@icedesign/img": "^0.1.2",
     "@icedesign/layout": "^0.1.1",
     "@icedesign/menu": "^0.1.1",
     "@icedesign/panel": "^0.1.1",
@@ -21,6 +21,7 @@
     "enquire-js": "^0.1.2",
     "foundation-symbol": "^0.1.0",
     "node-sass": "^4.9.1",
+    "npm": "^6.1.0",
     "prop-types": "^15.5.8",
     "react": "^16.4.1",
     "react-cookie": "^2.2.0",

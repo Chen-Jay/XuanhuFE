@@ -11,6 +11,8 @@ import Realhome from './pages/Realhome';
 import NotFound from './pages/NotFound';
 import CourseDetail from './pages/CourseDetail/CourseDetail';
 
+import UserInfo from './pages/UserInfo/UserInfo';
+import EditUserInfo from './pages/EditUserInfo/EditUserInfo';
 const routerConfig = [
   {
     path: '/reg',
@@ -30,6 +32,16 @@ const routerConfig = [
     path: '/course/:courseId',
     layout: HeaderFooterLayout, 
     component: CourseDetail
+  },
+  {
+    path:'/userInfo',
+    layout: HeaderFooterLayout,
+    component: UserInfo,
+  },
+  {
+    path:'/editUserInfo',
+    layout: HeaderFooterLayout,
+    component: EditUserInfo,
   },
   {
     path: '*',
