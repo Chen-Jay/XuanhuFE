@@ -28,6 +28,9 @@ export default class CourseDetail extends Component {
         teachers: [{
           'name': '姓名',
         }],
+        department: {
+          "name": "软件学院"
+        },
         intro: '林连南，中科院软件与理论专业博士，讲师。研究方向：软件工程与智能人机交互技术。个人荣誉：多次获得省级、国家级软件比赛一等奖；授课主讲软件需求分析、设计与建模，软件体系结构，智能人机交互技术；指导核心软件工程实践课程；项目：主持科研、教研、企业和政府项目近15项；指导学生研究项目，国家级学生创新创业项目近20项。'
       },
       courseInfoVisible: false,
@@ -49,10 +52,14 @@ export default class CourseDetail extends Component {
   }
 
   onClickAddComment(e) {
+    const content = document.getElementById("generalEditor").value;
+    if(content.length < 10) {
+      Feedback.toast.error("字数过少");
+      return;
+    }
     this.setState({
       generalEditorButtonLoading: true
     });
-    const content = document.getElementById("generalEditor").value;
     axios.post(this.getCourseCommentsApiUrl(this.getCourseId()), {
       content: content,
     }).then(response => {
@@ -112,7 +119,7 @@ export default class CourseDetail extends Component {
           >
             <Timeline>
               <TimelineItem title={"授课教师：" + teacherNameListStr} />
-              <TimelineItem title="课程属性：" />
+              <TimelineItem title={"开课学院：" + this.state.courseInfo.department.name} />
               <TimelineItem title="上课时间：" />
             </Timeline>
           </Card>

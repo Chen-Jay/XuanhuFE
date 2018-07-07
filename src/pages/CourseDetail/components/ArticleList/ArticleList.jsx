@@ -25,7 +25,7 @@ export default class ArticleList extends Component {
     var arr = window.location.hash.split("/");
     return arr[2];
   }
-  
+
   getCourseCommentsApiUrl(id) {
     return ud.getInstance().concat("api/courses/" + id + "/comments");
   }
@@ -59,6 +59,10 @@ export default class ArticleList extends Component {
 
   onClickReplyToDialogSubmit(e) {
     const content = document.getElementById("replyToEditor").value;
+    if(content.length < 10) {
+      Feedback.toast.error("字数过少");
+      return;
+    }
     axios.post(this.getCourseCommentsApiUrl(this.getCourseId()), {
       content: content,
       parent_id: this.state.replyToDialogParentId
