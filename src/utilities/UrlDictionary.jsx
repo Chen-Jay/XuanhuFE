@@ -17,6 +17,7 @@ export default class UrlDictionary {
         this.map.set('login', 'login');
         this.map.set('logout', 'logout');
         this.map.set('register', 'reg');
+        this.map.set('latestComments', 'latest');
     }
     get(k) {
         return this.map.get(k);

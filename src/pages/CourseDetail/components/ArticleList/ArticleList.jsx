@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
-import { Icon,Ballon, Grid, Feedback } from '@icedesign/base';
+import { Icon, Dialog, Ballon, Grid, Feedback, Input, Button } from '@icedesign/base';
 const { Row, Col } = Grid;
 
 import IcePanel from '@icedesign/panel';
 // import UserInfoCard from '../UserInfoCard'
 import ud from '../../../../utilities/UrlDictionary';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
 export default class ArticleList extends Component {
   static displayName = 'ArticleList';
@@ -14,12 +15,19 @@ export default class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      replyToDialogVisible: false,
+      replyToDialogName: "用户名",
+      replyToDialogParentId: null
     };
   }
 
   getCourseId() {
     var arr = window.location.hash.split("/");
     return arr[2];
+  }
+  
+  getCourseCommentsApiUrl(id) {
+    return ud.getInstance().concat("api/courses/" + id + "/comments");
   }
 
   onClickVote(id, voteType, e) {
@@ -41,6 +49,47 @@ export default class ArticleList extends Component {
     });
   }
 
+  onClickReplyToButton(parentId, userName, e) {
+    this.setState({
+      replyToDialogVisible: true,
+      replyToDialogName: userName,
+      replyToDialogParentId: parentId
+    });
+  }
+
+  onClickReplyToDialogSubmit(e) {
+    const content = document.getElementById("replyToEditor").value;
+    axios.post(this.getCourseCommentsApiUrl(this.getCourseId()), {
+      content: content,
+      parent_id: this.state.replyToDialogParentId
+    }).then(response => {
+      Feedback.toast.success("发布成功！");
+      window.location.reload();
+    }).catch(e => {
+      Feedback.toast.error("发布失败！");
+    });
+  }
+
+  generateReplyToDialog() {
+    const footer = (
+      <Button type="primary" onClick={this.onClickReplyToDialogSubmit.bind(this)}>提交</Button>
+    );
+    return (
+      <Dialog
+        title={"回复 - " + this.state.replyToDialogName}
+        footer={footer}
+        animation={{ in: 'fadeInDown', out: 'fadeOutUp' }}
+        closeable="close"
+        onClose={(e)=>{ this.setState({replyToDialogVisible: false}); }}
+        visible={this.state.replyToDialogVisible}
+        style={{
+          width: "60%"
+        }}>
+        <Input id="replyToEditor" placeholder="支持 Markdown 语法" size="medium" multiple style={{width: "100%"}} rows="12" />
+      </Dialog>
+    );
+  }
+
   generateReplyPanel(item) {
     return (
       <div>
@@ -55,7 +104,7 @@ export default class ArticleList extends Component {
                 <span id={"downvote-" + item.id} onClick={this.onClickVote.bind(this, item.id, -1)} style={styles.itemMetaIcon}>
                   <Icon type={item.voteValue == -1 ? "arrow-down-filling" : "arrow-down"} size="small" /> {item.voteDown}
                 </span>
-                <span id={"reply-" + item.id} style={styles.itemMetaIcon}>
+                <span onClick={this.onClickReplyToButton.bind(this, item.id, item.user.name)} id={"reply-" + item.id} style={styles.itemMetaIcon}>
                   <Icon type="skip" size="small" /> 回复Ta
                 </span>
               </span>
@@ -63,7 +112,8 @@ export default class ArticleList extends Component {
             </IcePanel.Header>
             <IcePanel.Body>
               <div>
-                <p style={styles.content}>{item.content}</p>
+                {/* <p style={styles.content}>{item.content}</p> */}
+                <ReactMarkdown source={item.content} />
                 {item.nestedComment.map((i) => {
                   return (this.generateReplyPanel(i));
                 })}
@@ -81,6 +131,7 @@ export default class ArticleList extends Component {
   render() {
     return (
       <div className="article-list">
+      {this.generateReplyToDialog()}
         <div>
           {this.props.comments.map((item, index) => {
             return (
