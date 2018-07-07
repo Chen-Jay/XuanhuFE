@@ -35,12 +35,12 @@ const routerConfig = [
     component: CourseDetail,
   },
   {
-    path:'/userInfo',
+    path:'/user/:id',
     layout: HeaderFooterLayout,
     component: UserInfo,
   },
   {
-    path:'/editUserInfo',
+    path:'/userinfo',
     layout: HeaderFooterLayout,
     component: EditUserInfo,
   },
