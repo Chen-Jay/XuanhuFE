@@ -132,7 +132,7 @@ class Header extends PureComponent {
                     className="user-department"
                     style={{ fontSize: '12px', color: '#999' }}
                   >
-                    {(userInfo.is_teacher) ? '认证教师' : '普通用户'}
+                    {(userInfo.teacher_id != null) ? '认证教师' : '普通用户'}
                   </span>
                 </div>
                 <Icon
@@ -147,13 +147,13 @@ class Header extends PureComponent {
           >
             <ul>
               <li className="user-profile-menu-item">
-                <Link to="/">
+                <Link to={"/user/" + userInfo.id}>
                   <FoundationSymbol type="person" size="small" />我的主页
                 </Link>
               </li>
               <li className="user-profile-menu-item">
-                <Link to="/">
-                  <FoundationSymbol type="repair" size="small" />设置
+                <Link to="/userinfo">
+                  <FoundationSymbol type="repair" size="small" />修改信息
                 </Link>
               </li>
               <li className="user-profile-menu-item">

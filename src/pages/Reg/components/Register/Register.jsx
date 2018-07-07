@@ -66,17 +66,12 @@ export default class Register extends Component {
         console.log('errors', errors);
         return;
       }
-      console.log('values:', values);
       axios.post(ud.getInstance().api("register"), values).then((response) => {
-        alert(response)
-        console.log(response)
-        // const { body } = response;
-        // this.setState({
-        //   data: body,
-        // });
+        Feedback.toast.success('注册成功');
+        window.location.replace("/#/signin");
+      }).catch(e => {
+        Feedback.toast.error("操作失败，请重试");
       });
-      Feedback.toast.success('注册成功');
-      // 登录成功后做对应的逻辑处理
     });
   };
 

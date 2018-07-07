@@ -20,8 +20,6 @@ export default class UserInfo extends Component {
   }
 
   handleImgError = () => {
-    // 你可以额外添加一些容错处理业务逻辑
-    // console.log('图片报错啦！日志记录下');
     this.setState({
       imgSrc: 'https://img.alicdn.com/tps/TB11W.WOXXXXXcbaXXXXXXXXXXX-496-310.png'
     });
@@ -40,19 +38,6 @@ export default class UserInfo extends Component {
         <Col span="18">
           <IceContainer>
             <Row>
-              {/* <div>
-                <Img
-                  src="https://images.wallpaperscraft.com/image/pokemon_charizard_mega_charizard_x_greninja_ash_greninja_113654_2560x1080.jpg"
-                  type="contain"
-                  height={450}
-                  style={{ marginTop: '0' }}
-                  enableAliCDNSuffix='true'
-                  onError={this.handleImgError}
-                />  
-              </div> */}
-            </Row>
-            <Row>
-
               <Col span='4' height="150">
                 <div>
                   <Img
@@ -78,15 +63,13 @@ export default class UserInfo extends Component {
               {/* <Col span='2'/> */}
               <Col span='4'>
                 <Button 
-                size="large" 
-                shape='ghost' 
-                onClick={this.handleEditUserInfo} 
-                style={{ marginTop: "65%" }}
-                component='a'
-                href="/#/editUserInfo"
-                >
-                  编辑个人资料
-                  </Button>
+                  size="large" 
+                  shape='ghost' 
+                  onClick={this.handleEditUserInfo} 
+                  style={{ marginTop: "65%" }}
+                  component='a'
+                  href="/#/userinfo"
+                >编辑个人资料</Button>
               </Col>
             </Row>
           </IceContainer>
@@ -110,12 +93,4 @@ export default class UserInfo extends Component {
 
 
 const styles = {
-  backgroundImage: {
-    backgroundImage:
-      'url(https://images.wallpaperscraft.com/image/beach_ocean_sand_palm_trees_bungalows_95633_2560x1080.jpg)',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    overflow: 'hidden',
-    backgroundSize: '100% 100%'
-  }
 };

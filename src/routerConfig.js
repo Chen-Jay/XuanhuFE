@@ -28,18 +28,19 @@ const routerConfig = [
     path: '/',
     layout: HeaderFooterLayout,
     component: Realhome,
-  },{
-    path: '/course/:courseId',
-    layout: HeaderFooterLayout, 
-    component: CourseDetail
   },
   {
-    path:'/userInfo',
+    path: '/course/:courseId',
+    layout: HeaderFooterLayout,
+    component: CourseDetail,
+  },
+  {
+    path:'/user/:id',
     layout: HeaderFooterLayout,
     component: UserInfo,
   },
   {
-    path:'/editUserInfo',
+    path:'/userinfo',
     layout: HeaderFooterLayout,
     component: EditUserInfo,
   },
@@ -47,7 +48,12 @@ const routerConfig = [
     path: '*',
     layout: BlankLayout,
     component: NotFound,
-  }
+  },
+  {
+    path: 'notfound',
+    layout: BlankLayout,
+    component: NotFound,
+  },
 ];
 
 export default routerConfig;
