@@ -1,93 +1,66 @@
 import React, { Component } from 'react';
 import IceContainer from '@icedesign/container';
-import { Icon,Ballon } from '@icedesign/base';
+import { Icon, Dialog, Ballon, Grid, Feedback, Input, Button } from '@icedesign/base';
+const { Row, Col } = Grid;
 
 import IcePanel from '@icedesign/panel';
-import UserInfoCard from '../UserInfoCard'
-
-const generatorData = () => {
-    return [{
-      title: '软件需求分析与建模',
-      description:
-        '在这门课，我学到了怎么利用StarUML进行一些建模工作，受益匪浅。llnnb。',
-      userContent: {
-        "name": '连木明',
-        "desc": '2016软件工程卓越班',
-        "loc": '广州',
-        'tag': 'lmmnb',
-        'email': '1461014539@qq.com'
-      },
-      like: 123,
-      favor: 114514,
-      comment: 233,
-    }, {
-      title: '软件需求分析与建模',
-      description:
-        '上课很吔屎。但是我觉得李静锴实验员不错。',
-      userContent: {
-        "name": '陈俊伟',
-        "desc": '2016软件工程5班',
-        "loc": '广州',
-        'tag': 'wqnb',
-        'email': '394715636@qq.com'
-      },
-      like: 123,
-      favor: 114514,
-      comment: 233,
-    }];
-};
+import ud from '../../../../utilities/UrlDictionary';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import {Link} from 'react-router-dom';
 
 export default class ArticleList extends Component {
   static displayName = 'ArticleList';
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    };
   }
 
-  getCourseId() {
-    var arr = window.location.hash.split("/");
-    return arr[2];
+  generateReplyPanel(item) {
+    var itemTimeDesc = (item.created_at == item.updated_at ? "创建于" : "编辑于") + " ";
+    var userInfo = JSON.parse(window.localStorage.getItem("user_info"));
+    if (userInfo == undefined || userInfo == null) {
+      userInfo = {
+        id: -1
+      };
+    }
+    let commentator = userInfo.id != item.user.id ? " - " + item.user.name : "";
+    return (
+      <div>
+          <IcePanel status="info" style={{ marginBottom: "5px" }}>
+            <IcePanel.Header>
+            <div style={{marginTop: "2px", marginBottom: "2px"}}>
+            <span align="left"><a href={"/#/course/"+item.course.id} target="_blank"><u>{item.course.title}</u></a>{commentator}</span>
+              &nbsp; &nbsp;<span>{itemTimeDesc}{(item.created_at == item.updated_at ? item.created_at : item.updated_at).substring(0, 19).split("T").map(i => {return i + " ";})}</span>
+              <span style={{float:'right'}}>
+                <span style={styles.itemMetaIcon}>
+                  <Icon type="good" size="small" /> {item.voteUp}
+                </span>
+                <span style={styles.itemMetaIcon}>
+                  <Icon type="bad" size="small" /> {item.voteDown}
+                </span>
+              </span>
+            </div>
+            </IcePanel.Header>
+            <IcePanel.Body>
+              <div>
+                <ReactMarkdown source={item.content} />
+              </div>
+            </IcePanel.Body>
+          </IcePanel>
+      </div>
+    )
   }
 
   render() {
-    const dataSource = generatorData();
     return (
       <div className="article-list">
         <div>
-          {dataSource.map((item, index) => {
+          {this.props.comments.map((item, index) => {
             return (
-              <div>
-                <IcePanel status="info" style={{ marginTop: "20px" }}>
-                  <IcePanel.Header>
-                  <p style={{marginTop: "2px", marginBottom: "2px"}}>
-                      <a>
-                          <div>
-                          <UserInfoCard content={item.userContent} trigger={item.title} />
-                        </div>
-                      </a>
-                    </p>
-                  </IcePanel.Header>
-                  <IcePanel.Body>
-                    <div>
-                      <p style={styles.desc}>{item.description}</p>
-                    </div>
-                    <div style={styles.articleItemFooter}>
-                      <div style={styles.articleItemMeta}>
-                        <span style={styles.itemMetaIcon}>
-                          <Icon type="good" size="small" /> {item.like}
-                        </span>
-                        <span style={styles.itemMetaIcon}>
-                          <Icon type="favorite" size="small" /> {item.favor}
-                        </span>
-                        <span style={styles.itemMetaIcon}>
-                          <Icon type="comments" size="small" /> {item.comment}
-                        </span>
-                      </div>
-                    </div>
-                  </IcePanel.Body>
-                </IcePanel>
-              </div>
+              this.generateReplyPanel(item)
             );
           }
           )}
@@ -125,10 +98,10 @@ const styles = {
     color: '#333',
     textDecoration: 'none',
   },
-  desc: {
+  content: {
     lineHeight: '24px',
     fontSize: '14px',
-    color: '#999',
+    color: '#333333',
   },
   articleItemFooter: {
     display: 'flex',
@@ -152,7 +125,7 @@ const styles = {
   },
   itemMetaIcon: {
     fontSize: '14px',
-    color: '#999',
+    color: '#5485f7',
     marginRight: '15px',
   },
 };

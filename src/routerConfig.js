@@ -40,6 +40,11 @@ const routerConfig = [
     component: UserInfo,
   },
   {
+    path: 'myhome',
+    layout: HeaderFooterLayout,
+    component: UserInfo,
+  },
+  {
     path:'/userinfo',
     layout: HeaderFooterLayout,
     component: EditUserInfo,

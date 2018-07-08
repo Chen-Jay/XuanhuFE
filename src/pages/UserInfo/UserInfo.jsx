@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 
 /*********************************************** */
-import { Grid } from "@icedesign/base";
+import { Grid, Feedback } from "@icedesign/base";
 const { Row, Col } = Grid;
 
 import Img from '@icedesign/img';
 import ArticleList from './components/ArticleList';
 import IceContainer from '@icedesign/container';
-import { Button } from '@icedesign/base';
+import { Button, Tab, Loading } from '@icedesign/base';
+const { TabPane } = Tab;
 /*********************************************** */
+
+import ud from "../../utilities/UrlDictionary";
+import axios from "axios";
 
 
 export default class UserInfo extends Component {
@@ -16,32 +20,114 @@ export default class UserInfo extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      userInfo: {
+        name: "用户名",
+        description: "用户简介",
+        avatar_url: null
+      },
+      upperVisible: false,
+      commentList: [],
+      upvoteList: [],
+      downvoteList: []
+    };
   }
 
-  handleImgError = () => {
-    this.setState({
-      imgSrc: 'https://img.alicdn.com/tps/TB11W.WOXXXXXcbaXXXXXXXXXXX-496-310.png'
+  getUserId() {
+    let arr = window.location.hash.split("/");
+
+    if(arr[1] == "user") {
+      return arr[2];
+    } else {
+      let info = JSON.parse(window.localStorage.getItem("user_info"));
+      if (info != undefined && info != null) {
+        return info.id;
+      } else {
+        return -1;
+      }
+    }
+  }
+
+  onCommentListClick() {
+    if(this.state.commentList.length != 0) {
+      return;
+    }
+    let url = ud.getInstance().concat("api/users/" + this.getUserId() + "/comments");
+    axios.get(url).then(r => {
+      const {data} = r;
+      this.setState({
+        commentList: data
+      });
+    }).catch(e => {
+      Feedback.toast.error("网络访问失败");
     });
-  };
+  }
 
-  //点击编辑个人资料按钮
-  handleEditUserInfo = () => {
+  onUpvoteDownvoteListClick() {
+    if(this.state.upvoteList.length != 0) {
+      return;
+    }
+    let url = ud.getInstance().concat("api/users/" + this.getUserId() + "/votes");
+    axios.get(url).then(r => {
+      const {data} = r;
+      var up = [];
+      var down = [];
+      data.forEach( item => {
+        if (item.voteValue == 1) {
+          up.push(item);
+        } else {
+          down.push(item);
+        }
+      });
+      this.setState({
+        upvoteList: up,
+        downvoteList: down
+      })
+    }).catch(e => {
+      Feedback.toast.error("网络访问失败");
+    });
+  }
 
+  loadInfo() {
+    let url = ud.getInstance().concat("api/users/" + this.getUserId());
+    axios.get(url).then(r => {
+      const {data} = r;
+      this.setState({
+        userInfo: data,
+        upperVisible: true,
+        commentList: [],
+        upvoteList: [],
+        downvoteList: []
+      });
+    }).catch(e => {
+      window.location.replace("/#/notfound");
+    });
+  }
+
+  componentDidMount() {
+    this.loadInfo();
+    this.onCommentListClick();
   }
 
   render() {
-    return (<div>
-
+    var isSameUser = false;
+    let info = JSON.parse(window.localStorage.getItem("user_info"));
+    if ((info != undefined && info != null) && info.id == this.getUserId()) {
+      isSameUser = true;
+    }
+    var whoseInfo = isSameUser ? "我的" : "Ta的";
+    return (
+    <div>
       <Row >
         <Col span='3' />
         <Col span="18">
+        <Loading style={{display: 'block'}} visible={!this.state.upperVisible} shape="dot-circle">
           <IceContainer>
             <Row>
               <Col span='4' height="150">
                 <div>
                   <Img
-                    src="//img.alicdn.com/tfs/TB1K..3PpXXXXa4XFXXXXXXXXXX-311-199.png"
+                    src={this.state.userInfo.avatar_url == null ? "//img.alicdn.com/tfs/TB1nf.WjyqAXuNjy1XdXXaYcVXa-245-245.gif" : this.state.userInfo.avatar_url}
                     shape="rounded"
                     type="cover"
                     width={150}
@@ -53,34 +139,44 @@ export default class UserInfo extends Component {
               <Col span='16'>
                 <div>
                   <h1 style={{ fontSize: '40px', marginLeft: '10px', marginTop: "60px" }}>
-                    白天黑夜
+                    {this.state.userInfo.name}
                 </h1>
                   <h3 style={{ fontSize: '20px', marginLeft: '10px' }}>
-                    皇家万六学院菜鸡，求大佬赐教皇家万六学院菜鸡，求大佬赐教
+                  {this.state.userInfo.description}
                 </h3>
                 </div>
               </Col>
               {/* <Col span='2'/> */}
               <Col span='4'>
-                <Button 
+                {isSameUser ? <Button 
                   size="large" 
                   shape='ghost' 
-                  onClick={this.handleEditUserInfo} 
                   style={{ marginTop: "65%" }}
                   component='a'
                   href="/#/userinfo"
-                >编辑个人资料</Button>
+                >编辑个人资料</Button> : <span />}
               </Col>
             </Row>
           </IceContainer>
+          </Loading>
         </Col>
         <Col span='3' />
       </Row>
       <Row>
         <Col span='3' />
         <Col span='18'>
-          <IceContainer title='我的评论'>
-            <ArticleList />
+          <IceContainer>
+            <Tab size="small" type="wrapped">
+              <TabPane onClick={this.onCommentListClick.bind(this)} key="comments" tab={whoseInfo+"评论"}>
+                <ArticleList comments={this.state.commentList} />
+              </TabPane>
+              <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="upvote" tab={whoseInfo+"赞同"}>
+                <ArticleList comments={this.state.upvoteList} />
+              </TabPane>
+              <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="downvote" tab={whoseInfo+"反对"}>
+                <ArticleList comments={this.state.downvoteList} />
+              </TabPane>
+            </Tab>
           </IceContainer>
         </Col>
 

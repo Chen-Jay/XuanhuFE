@@ -28,9 +28,11 @@ class Header extends PureComponent {
       }
     });
   }
+
   onSearchClick() {
     Feedback.toast.success('not implemented yet');
   }
+
   render() {
     const { width, theme, isMobile, className, style } = this.props;
     var userInfo = null;
@@ -101,8 +103,6 @@ class Header extends PureComponent {
           }}
           onSearch={this.onSearchClick}
         />
-          
-
         {(userInfo != null)?
         (
           <Balloon
@@ -119,7 +119,7 @@ class Header extends PureComponent {
                   height={40}
                   width={40}
                   src={
-                    userInfo.avatar_url == null ? 'http://static.cnmooc.org/repositry/usrimg/1505/8/0569c2bb64564e86b789a4aa17da5b1a/90.png' : userInfo.avatar_url
+                    userInfo.avatar_url == null ? '//img.alicdn.com/tfs/TB1nf.WjyqAXuNjy1XdXXaYcVXa-245-245.gif' : userInfo.avatar_url
                   }
                   className="user-avatar"
                 />
@@ -147,7 +147,7 @@ class Header extends PureComponent {
           >
             <ul>
               <li className="user-profile-menu-item">
-                <Link to={"/user/" + userInfo.id}>
+                <Link to="/myhome">
                   <FoundationSymbol type="person" size="small" />我的主页
                 </Link>
               </li>

@@ -8,6 +8,7 @@ import IcePanel from '@icedesign/panel';
 import ud from '../../../../utilities/UrlDictionary';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import {Link} from 'react-router-dom';
 
 export default class ArticleList extends Component {
   static displayName = 'ArticleList';
@@ -96,13 +97,13 @@ export default class ArticleList extends Component {
 
   generateReplyPanel(item) {
     var itemTimeDesc = (item.created_at == item.updated_at ? "创建于" : "编辑于") + " ";
-    
     return (
       <div>
           <IcePanel status="info" style={{ marginTop: "20px" }}>
             <IcePanel.Header>
             <div style={{marginTop: "2px", marginBottom: "2px"}}>
-              <span align="left">{item.user.name + (item.user.teacher_id == null ? "" : ' [认证教师]')}</span>&nbsp; &nbsp;<span>{itemTimeDesc}{(item.created_at == item.updated_at ? item.created_at : item.updated_at).substring(0, 19).split("T").map(i => {return i + " ";})}</span>
+              <Link to={"/user/"+item.user.id}><span align="left"><u>{item.user.name + (item.user.teacher_id == null ? "" : ' [认证教师]')}</u></span></Link>
+              &nbsp; &nbsp;<span>{itemTimeDesc}{(item.created_at == item.updated_at ? item.created_at : item.updated_at).substring(0, 19).split("T").map(i => {return i + " ";})}</span>
               <span style={{float:'right'}}>
                 <span id={"upvote-" + item.id} onClick={this.onClickVote.bind(this, item.id, 1)} style={styles.itemMetaIcon}>
                   <Icon type={item.voteValue == 1 ? "arrow-up-filling" : "arrow-up"} size="small" /> {item.voteUp}
