@@ -30,7 +30,7 @@ export default class UserInfoCard extends Component {
             delay='0'
           >
             <div style={styles.content}>
-              <div style={styles.head}>
+              {/* <div style={styles.head}>
                 <img
                   src="https://img.alicdn.com/tfs/TB1nf.WjyqAXuNjy1XdXXaYcVXa-245-245.gif"
                   style={styles.avatar}
@@ -40,8 +40,8 @@ export default class UserInfoCard extends Component {
                   <h5 style={styles.name}>{this.state.content.name}</h5>
                   <p style={styles.deptName}>{this.state.content.desc}</p>
                 </div>
-              </div>
-              <ul style={styles.body}>
+              </div> */}
+              {/* <ul style={styles.body}>
                 <li style={styles.profileItem}>
                   <Icon type="map" size="xs" style={styles.itemIcon} /> {this.state.content.loc}
                 </li>
@@ -49,25 +49,26 @@ export default class UserInfoCard extends Component {
                   <Icon type="discount" size="xs" style={styles.itemIcon} />
                   {this.state.content.tag}
                 </li>
-                {/* <li style={styles.profileItem}>
+                <li style={styles.profileItem}>
                   <Icon type="phone" size="xs" style={styles.itemIcon} />
                   871066160
                 </li>
                 <li style={styles.profileItem}>
                   <Icon type="mobile-phone" size="xs" style={styles.itemIcon} />
                   13867894321
-                </li> */}
+                </li>
                 <li style={{ ...styles.profileItem, width: '100%' }}>
                   <a href={"mailto:"+this.state.content.email}>
                     <Icon type="email" size="xs" style={styles.itemIcon} />
                     {this.state.content.email}
                   </a>
                 </li>
-                {/* <li style={{ ...styles.profileItem, width: '100%' }}>
+                <li style={{ ...styles.profileItem, width: '100%' }}>
                   <Icon type="account" size="xs" style={styles.itemIcon} />
                   主管：李四
-                </li> */}
-              </ul>
+                </li>
+              </ul> */}
+              <p></p>
             </div>
           </Balloon>
         {/* </div> */}

@@ -13,6 +13,9 @@ const { Row, Col } = Grid;
 const { Group: RadioGroup } = Radio;
 const { ImageUpload } = Upload;
 
+import ud from "../../utilities/UrlDictionary";
+import axios from "axios";
+
 function beforeUpload(info) {
     console.log('beforeUpload callback : ', info);
 }
@@ -58,7 +61,7 @@ export default class EditUserInfo extends Component {
     }
 
     componentDidMount() {
-        var info = JSON.parse(window.localStorage.getItem("user_info"));
+        let info = JSON.parse(window.localStorage.getItem("user_info"));
         if (info == undefined || info == null) {
             window.location.replace("/#/notfound");
             return;
@@ -69,7 +72,23 @@ export default class EditUserInfo extends Component {
     }
 
     onClickSubmit() {
-        Feedback.toast.success("not implemented yet");
+        let info = JSON.parse(window.localStorage.getItem("user_info"));
+        let url = ud.getInstance().concat("api/users/" + info.id);
+        var data = {};
+        if(document.getElementById("formName").value.length != 0) {
+            data.name = document.getElementById("formName").value;
+        }
+        if(document.getElementById("formDescription").value.length != 0) {
+            data.description = document.getElementById("formDescription").value;
+        }
+        axios.put(url, data).then(response => {
+            const {data} = response;
+            window.localStorage.setItem("user_info", JSON.stringify(data));
+            Feedback.toast.success("保存成功");
+            setTimeout(() => {window.location.reload();}, 800);
+        }).catch(e => {
+            Feedback.toast.error("保存失败");
+        });
     }
 
     onDragOver = () => {
@@ -77,7 +96,7 @@ export default class EditUserInfo extends Component {
     };
 
     onDrop = (fileList) => {
-        // console.log('drop callback : ', fileList);
+        console.log('drop callback : ', fileList);
     };
 
     formChange = (value) => {
@@ -103,11 +122,11 @@ export default class EditUserInfo extends Component {
 
                                 <Row style={styles.formItem}>
                                     <Col xxs="6" s="3" l="3" style={styles.label}>
-                                        姓名&nbsp;
+                                        用户名&nbsp;
                                     </Col>
                                     <Col s="12" l="10">
                                         <IceFormBinder name="name" required max={10} message="必填">
-                                            <Input value={this.state.userInfo.name} size="large" placeholder="张三" />
+                                            <Input id="formName" size="large" placeholder="不更改请留空" />
                                         </IceFormBinder>
                                         <IceFormError name="name" />
                                     </Col>
@@ -145,7 +164,7 @@ export default class EditUserInfo extends Component {
                                     </Col>
                                     <Col s="12" l="10">
                                         <IceFormBinder name="description">
-                                            <Input value={this.state.userInfo.description} size="large" multiple placeholder="请输入描述..." />
+                                            <Input id="formDescription" size="large" multiple placeholder="不更改请留空" />
                                         </IceFormBinder>
                                         <IceFormError name="description" />
                                     </Col>
