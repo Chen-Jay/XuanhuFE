@@ -106,9 +106,12 @@ export default class CourseDetail extends Component {
   }
 
   courseInfo() {
-    var teacherNameListStr = this.state.courseInfo.teachers[0].name;
-    for(var i = 1; i < this.state.courseInfo.teachers.length; ++i) {
-      teacherNameListStr += "、" + this.state.courseInfo.teachers[i].name;
+    var teacherNameListStr = "暂无信息";
+    if(this.state.courseInfo.teachers.length != 0) {
+      teacherNameListStr = this.state.courseInfo.teachers[0].name;
+      for(var i = 1; i < this.state.courseInfo.teachers.length; ++i) {
+        teacherNameListStr += "、" + this.state.courseInfo.teachers[i].name;
+      }
     }
     return (
     <Loading visible={!this.state.courseInfoVisible} shape="fusion-reactor">
