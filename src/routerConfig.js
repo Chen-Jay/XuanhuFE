@@ -13,6 +13,10 @@ import CourseDetail from './pages/CourseDetail/CourseDetail';
 
 import UserInfo from './pages/UserInfo/UserInfo';
 import EditUserInfo from './pages/EditUserInfo/EditUserInfo';
+import searchresult from './pages/SearchResult/SearchResult';
+import { Search } from '@icedesign/base';
+import SearchResult from './pages/SearchResult/SearchResult';
+
 const routerConfig = [
   {
     path: '/reg',
@@ -48,6 +52,11 @@ const routerConfig = [
     path:'/userinfo',
     layout: HeaderFooterLayout,
     component: EditUserInfo,
+  },
+  {
+    path:'/searchresult',
+    layout:HeaderFooterLayout,
+    component: SearchResult,
   },
   {
     path: '*',
