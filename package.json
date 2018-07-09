@@ -16,6 +16,7 @@
     "@icedesign/menu": "^0.1.1",
     "@icedesign/panel": "^0.1.1",
     "@icedesign/skin": "^0.1.0",
+    "@icedesign/title": "^0.1.1",
     "@opuscapita/react-markdown": "^2.2.3",
     "axios": "^0.18.0",
     "classnames": "^2.2.5",
