@@ -21,7 +21,7 @@
     "classnames": "^2.2.5",
     "enquire-js": "^0.1.2",
     "foundation-symbol": "^0.1.0",
-    "node-sass": "^4.9.1",
+    "node-sass": "^4.9.2",
     "npm": "^6.1.0",
     "prop-types": "^15.5.8",
     "react": "^16.4.1",

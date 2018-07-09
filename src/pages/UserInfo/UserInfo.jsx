@@ -36,7 +36,7 @@ export default class UserInfo extends Component {
   getUserId() {
     let arr = window.location.hash.split("/");
 
-    if(arr[1] == "user") {
+    if (arr[1] == "user") {
       return arr[2];
     } else {
       let info = JSON.parse(window.localStorage.getItem("user_info"));
@@ -49,12 +49,12 @@ export default class UserInfo extends Component {
   }
 
   onCommentListClick() {
-    if(this.state.commentList.length != 0) {
+    if (this.state.commentList.length != 0) {
       return;
     }
     let url = ud.getInstance().concat("api/users/" + this.getUserId() + "/comments");
     axios.get(url).then(r => {
-      const {data} = r;
+      const { data } = r;
       this.setState({
         commentList: data
       });
@@ -64,15 +64,15 @@ export default class UserInfo extends Component {
   }
 
   onUpvoteDownvoteListClick() {
-    if(this.state.upvoteList.length != 0) {
+    if (this.state.upvoteList.length != 0) {
       return;
     }
     let url = ud.getInstance().concat("api/users/" + this.getUserId() + "/votes");
     axios.get(url).then(r => {
-      const {data} = r;
+      const { data } = r;
       var up = [];
       var down = [];
-      data.forEach( item => {
+      data.forEach(item => {
         if (item.voteValue == 1) {
           up.push(item);
         } else {
@@ -91,7 +91,7 @@ export default class UserInfo extends Component {
   loadInfo() {
     let url = ud.getInstance().concat("api/users/" + this.getUserId());
     axios.get(url).then(r => {
-      const {data} = r;
+      const { data } = r;
       this.setState({
         userInfo: data,
         upperVisible: true,
@@ -117,73 +117,69 @@ export default class UserInfo extends Component {
     }
     var whoseInfo = isSameUser ? "我的" : "Ta的";
     return (
-    <div>
-      <Row >
-        <Col span='3' />
-        <Col span="18">
-        <Loading style={{display: 'block'}} visible={!this.state.upperVisible} shape="dot-circle">
-          <IceContainer>
-            <Row>
-              <Col span='4' height="150">
-                <div>
-                  <Img
-                    src={this.state.userInfo.avatar_url == null ? "//img.alicdn.com/tfs/TB1nf.WjyqAXuNjy1XdXXaYcVXa-245-245.gif" : this.state.userInfo.avatar_url}
-                    shape="rounded"
-                    type="cover"
-                    width={150}
-                    height={150}
-                    style={{ marginLeft: "0", marginRight: "auto" }}
-                  />
-                </div>
-              </Col>
-              <Col span='16'>
-                <div>
-                  <h1 style={{ fontSize: '40px', marginLeft: '10px', marginTop: "60px" }}>
-                    {this.state.userInfo.name}
-                </h1>
-                  <h3 style={{ fontSize: '20px', marginLeft: '10px' }}>
-                  {this.state.userInfo.description}
-                </h3>
-                </div>
-              </Col>
-              {/* <Col span='2'/> */}
-              <Col span='4'>
-                {isSameUser ? <Button 
-                  size="large" 
-                  shape='ghost' 
-                  style={{ marginTop: "65%" }}
-                  component='a'
-                  href="/#/userinfo"
-                >编辑个人资料</Button> : <span />}
-              </Col>
-            </Row>
-          </IceContainer>
-          </Loading>
-        </Col>
-        <Col span='3' />
-      </Row>
-      <Row>
-        <Col span='3' />
-        <Col span='18'>
-          <IceContainer>
-            <Tab size="small" type="wrapped">
-              <TabPane onClick={this.onCommentListClick.bind(this)} key="comments" tab={whoseInfo+"评论"}>
-                <ArticleList comments={this.state.commentList} />
-              </TabPane>
-              <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="upvote" tab={whoseInfo+"赞同"}>
-                <ArticleList comments={this.state.upvoteList} />
-              </TabPane>
-              <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="downvote" tab={whoseInfo+"反对"}>
-                <ArticleList comments={this.state.downvoteList} />
-              </TabPane>
-            </Tab>
-          </IceContainer>
-        </Col>
+      <div>
+        <Row >
+          <Col span='3' />
+          <Col span="18">
+            <Loading style={{ display: 'block' }} visible={!this.state.upperVisible} shape="dot-circle">
+              <IceContainer id="parentContainer">
+                <Row>
+                  <Col span='19' height={150}>
+                    <span>
+                      <Img
+                        src={this.state.userInfo.avatar_url == null ? "//img.alicdn.com/tfs/TB1nf.WjyqAXuNjy1XdXXaYcVXa-245-245.gif" : this.state.userInfo.avatar_url}
+                        shape="rounded"
+                        type="cover"
+                        width={150}
+                        height={150}
+                        style={{ marginRight: "20px", float: 'left' }}
+                      />
+                      <h1 style={{ fontSize: '40px', marginLeft: '10px', marginTop: "60px" }}>
+                        {this.state.userInfo.name}
+                      </h1>
+                      <h3 style={{ fontSize: '20px', marginLeft: '10px' }}>
+                        {this.state.userInfo.description}
+                      </h3>
+                    </span>
+                  </Col>
+                  {/* <Col span='2'/> */}
+                  <Col span='5'>
+                    {isSameUser ? <Button
+                      size="large"
+                      shape="ghost"
+                      component="a"
+                      style={{ marginTop: "120px" }}
+                      href="/#/userinfo"
+                    ><span>编辑个人资料</span></Button> : <span />}
+                  </Col>
+                </Row>
+              </IceContainer>
+            </Loading>
+          </Col>
+          <Col span='3' />px
+        </Row>
+        <Row>
+          <Col span='3' />
+          <Col span='18'>
+            <IceContainer>
+              <Tab size="small" type="wrapped">
+                <TabPane onClick={this.onCommentListClick.bind(this)} key="comments" tab={whoseInfo + "评论"}>
+                  <ArticleList comments={this.state.commentList} />
+                </TabPane>
+                <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="upvote" tab={whoseInfo + "赞同"}>
+                  <ArticleList comments={this.state.upvoteList} />
+                </TabPane>
+                <TabPane onClick={this.onUpvoteDownvoteListClick.bind(this)} key="downvote" tab={whoseInfo + "反对"}>
+                  <ArticleList comments={this.state.downvoteList} />
+                </TabPane>
+              </Tab>
+            </IceContainer>
+          </Col>
 
-        <Col span='3' />
-      </Row>
+          <Col span='3' />
+        </Row>
 
-    </div>);
+      </div>);
   }
 }
 
